@@ -39,6 +39,22 @@ export function StoryModal() {
             <h2 className="pr-12 text-2xl font-bold leading-tight text-[#4f3529] sm:text-3xl">
               {item.title}
             </h2>
+            {item.image ? (
+              <figure className="mt-6 rounded-[1.5rem] border border-[#e8c590] bg-[#fff1cf] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_16px_34px_rgba(90,55,25,0.16)]">
+                <img
+                  src={item.image.src}
+                  alt={item.image.alt}
+                  className={[
+                    'w-full rounded-[1.1rem] border border-white/70 object-cover shadow-sm',
+                    item.image.layout === 'tall'
+                      ? 'max-h-[420px] object-top'
+                      : item.image.layout === 'square'
+                        ? 'max-h-[360px]'
+                        : 'max-h-[300px]',
+                  ].join(' ')}
+                />
+              </figure>
+            ) : null}
             <div className="mt-6 space-y-4 text-base leading-8 sm:text-lg">
               {item.body.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>

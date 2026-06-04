@@ -23,6 +23,11 @@ export type StoryItem = {
   label: string
   title: string
   body: string[]
+  image?: {
+    src: string
+    alt: string
+    layout?: 'wide' | 'square' | 'tall'
+  }
   hoverHint: string
   noteAfterComplete?: string
   nextItemId?: StoryItemId
@@ -78,6 +83,11 @@ export const storyItems: Record<StoryItemId, StoryItem> = {
     id: 'runningShoes',
     label: '跑鞋',
     title: '一年跑了 700 多公里之后',
+    image: {
+      src: '/assets/story/running.jpg',
+      alt: '跑步里程数据截图',
+      layout: 'wide',
+    },
     hoverHint: '这双鞋好像走过不少路。',
     noteAfterComplete:
       '跑鞋旁边好像还有一副泳镜。点点看，也许有另一段故事。',
@@ -95,6 +105,11 @@ export const storyItems: Record<StoryItemId, StoryItem> = {
     id: 'goggles',
     label: '泳镜',
     title: '花 900 块学会蛙泳之后',
+    image: {
+      src: '/assets/story/swimming.jpg',
+      alt: '游泳、浆板和跨栏记录拼图',
+      layout: 'square',
+    },
     hoverHint: '这里藏着一点“不怕掉进水里”的底气。',
     noteAfterComplete:
       '身体开始探索世界之后，脑子也开始冒出很多奇怪点子。去看看那台发光的电脑吧。',
@@ -114,6 +129,11 @@ export const storyItems: Record<StoryItemId, StoryItem> = {
     id: 'computer',
     label: '电脑',
     title: '新田 AI 实验室',
+    image: {
+      src: '/assets/story/creative.jpg',
+      alt: '创意海报和视觉物料合集',
+      layout: 'wide',
+    },
     hoverHint: '小心，这里经常生成奇怪但有趣的东西。',
     noteAfterComplete:
       '有些脑洞不只停在屏幕里。它们后来真的跑到了现实世界。去看看照片墙吧。',
@@ -135,6 +155,11 @@ export const storyItems: Record<StoryItemId, StoryItem> = {
     id: 'photoWall',
     label: '照片墙',
     title: '我喜欢把有趣的人聚在一起',
+    image: {
+      src: '/assets/story/events.jpg',
+      alt: '活动策划和猫咖现场照片合集',
+      layout: 'tall',
+    },
     hoverHint: '这些照片里，好像有很多奇奇怪怪的现场。',
     noteAfterComplete:
       '原来这块新田里，不只有兴趣，也有很多和别人相遇的瞬间。最后，去打开那个礼盒吧。',
