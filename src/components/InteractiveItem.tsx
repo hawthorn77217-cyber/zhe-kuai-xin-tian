@@ -1,19 +1,20 @@
 import { motion } from 'motion/react'
 import type { CSSProperties, ReactNode } from 'react'
 
-import type { AnimationType, StoryItem, StoryItemId } from '../config/story'
+import { storyOrder, type AnimationType, type StoryItem, type StoryItemId } from '../config/story'
 import { playSound } from '../lib/audio'
 import { useExploreStore } from '../store/useExploreStore'
 
 type ItemVisual = {
   className: string
   style: CSSProperties
-  render: (active: boolean, completed: boolean) => ReactNode
+  render: (active: boolean, completed: boolean, allCompleted: boolean) => ReactNode
 }
 
 type InteractiveItemProps = {
   item: StoryItem
   visual: ItemVisual
+  onSelectTarget?: (itemId: StoryItemId) => boolean
 }
 
 function getAnimation(animationType: AnimationType) {
@@ -35,17 +36,24 @@ function getAnimation(animationType: AnimationType) {
   }
 }
 
-export function InteractiveItem({ item, visual }: InteractiveItemProps) {
-  const unlockedItems = useExploreStore((state) => state.unlockedItems)
+export function InteractiveItem({ item, visual, onSelectTarget }: InteractiveItemProps) {
   const completedItems = useExploreStore((state) => state.completedItems)
   const activeAnimationId = useExploreStore((state) => state.activeAnimationId)
   const openItem = useExploreStore((state) => state.openItem)
-  const isUnlocked = unlockedItems.includes(item.id)
   const isCompleted = completedItems.includes(item.id)
+  const allCompleted = storyOrder.every((id) => completedItems.includes(id))
   const isActive = activeAnimationId === item.id
+  const tooltipPosition =
+    item.id === 'photoWall'
+      ? 'top-4'
+      : 'bottom-[calc(100%+10px)]'
+  const tooltipSize =
+    item.id === 'photoWall'
+      ? 'w-36 px-3 py-2 text-xs leading-5'
+      : 'w-44 px-4 py-3 text-sm leading-6'
 
   function handleClick(id: StoryItemId) {
-    if (!isUnlocked) {
+    if (onSelectTarget?.(id)) {
       return
     }
 
@@ -56,10 +64,10 @@ export function InteractiveItem({ item, visual }: InteractiveItemProps) {
   return (
     <motion.button
       type="button"
-      aria-label={isUnlocked ? `探索${item.label}` : `${item.label}尚未解锁`}
+      aria-label={`探索${item.label}`}
       className={[
         'group absolute z-20 flex items-center justify-center rounded-[1.75rem] transition',
-        isUnlocked ? 'cursor-pointer hover:z-40 hover:scale-105' : 'cursor-not-allowed',
+        'cursor-pointer hover:z-40 hover:scale-105',
         visual.className,
       ].join(' ')}
       style={visual.style}
@@ -67,14 +75,16 @@ export function InteractiveItem({ item, visual }: InteractiveItemProps) {
       animate={isActive ? getAnimation(item.animationType) : { scale: 1 }}
       transition={{ duration: 0.72, ease: 'easeInOut' }}
     >
-      <span className={isUnlocked ? '' : 'opacity-30 grayscale'}>
-        {visual.render(isActive, isCompleted)}
+      <span>{visual.render(isActive, isCompleted, allCompleted)}</span>
+      <span
+        className={[
+          'pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-2xl border border-[#e6c79b] bg-[#fff8e8]/95 text-[#6d4c37] opacity-0 shadow-xl transition-opacity group-hover:opacity-100',
+          tooltipSize,
+          tooltipPosition,
+        ].join(' ')}
+      >
+        {item.hoverHint}
       </span>
-      {isUnlocked ? (
-        <span className="pointer-events-none absolute bottom-[calc(100%+10px)] left-1/2 w-44 -translate-x-1/2 rounded-2xl border border-[#e6c79b] bg-[#fff8e8]/95 px-4 py-3 text-sm leading-6 text-[#6d4c37] opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
-          {item.hoverHint}
-        </span>
-      ) : null}
     </motion.button>
   )
 }

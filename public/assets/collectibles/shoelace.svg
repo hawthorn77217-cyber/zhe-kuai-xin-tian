@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <filter id="felt" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="4" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" scale="2.5"/>
+  </filter>
+  <g filter="url(#felt)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M31 86c26-34 53-33 80 0 11 13 23 16 33 3" stroke="#80a8b5" stroke-width="13"/>
+    <path d="M31 86c17 34 42 31 75-9 17-20 29-22 43-5" stroke="#d59b58" stroke-width="13"/>
+    <path d="M28 85l-13 5M149 71l12-4" stroke="#f0dfc4" stroke-width="7"/>
+  </g>
+</svg>
